@@ -16,7 +16,11 @@ const orderSchema = mongoose.Schema({
     ref: 'User',
     required: true,
   },
-  
+
+  phone: {
+    type: Number,
+  },
+
   address: {
     type: String,
     required: true, // Address is mandatory
@@ -42,7 +46,7 @@ const orderSchema = mongoose.Schema({
 
   image: {
     type: String,
-    
+
   },
 
   totalAmount: {
@@ -56,8 +60,8 @@ const orderSchema = mongoose.Schema({
     default: 'Pending',
   },
 
-  orderStatus:{
-    type:String,
+  orderStatus: {
+    type: String,
     default: 'Pending'
   },
 
