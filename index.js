@@ -8,6 +8,7 @@ const authRouter = require('./routes/authRoutes');
 const categoryRouter = require('./routes/categoryRoutes');
 const bannerRouter = require('./routes/bannerRoutes');
 const productRouter = require('./routes/productRoutes');
+const orderRouter = require('./routes/orderRoutes');
 const app = express();
 
 
@@ -18,6 +19,7 @@ app.use(authRouter);
 app.use(categoryRouter);
 app.use(bannerRouter);
 app.use(productRouter);
+app.use(orderRouter);
 
 
 

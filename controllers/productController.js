@@ -89,6 +89,7 @@ exports.updateProduct = async (req, res) => {
       description: req.body.description || product.description,
       images: req.body.images || product.images,
       popular: req.body.popular || product.popular,
+      quantity: req.body.quantity || product.quantity,
       recommend: req.body.recommend || product.recommend,
       additional: req.body.additional || product.additional,
     };
