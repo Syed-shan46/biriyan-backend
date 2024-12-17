@@ -2,8 +2,8 @@ const Product = require('../models/product');
 
 exports.addProduct = async (req, res) => {
   try {
-    const { itemName, itemPrice, description, category, images, popular, recommend, isAdditional, additional } = req.body
-    const product = new Product({ itemName, itemPrice, description, category, popular, isAdditional, recommend, images, additional });
+    const { itemName, itemPrice, quantity, description, category, images, popular, recommend, isAdditional, additional } = req.body
+    const product = new Product({ itemName, itemPrice, quantity, description, category, popular, isAdditional, recommend, images, additional });
     await product.save();
     return res.status(201).send(product);
     res.status(500).json({ error: e.message });
