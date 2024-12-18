@@ -16,6 +16,9 @@ const orderSchema = mongoose.Schema({
     ref: 'User',
     required: true,
   },
+  userName: {
+    type: String,
+  },
 
   phone: {
     type: Number,

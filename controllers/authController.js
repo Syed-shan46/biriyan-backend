@@ -81,4 +81,47 @@ exports.checkUser = async (req, res) => {
   }
 };
 
+exports.updateUsername = async (req, res) => {
+  const { phone, username } = req.body;
+
+  if (!phone || !username) {
+    return res.status(400).json({ message: 'Phone number and username are required' });
+  }
+
+  try {
+    const user = await User.findOneAndUpdate(
+      { phone },
+      { username },
+      { new: true } // Return the updated document
+    );
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    res.status(200).json({ message: 'Username updated successfully', user });
+  } catch (error) {
+    console.error('Error updating username:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
+
+// Fetch user by userId
+exports.getUserById = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    if (!userId) {
+      return res.status(400).json({ message: "User ID is required" });
+    }
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    res.status(200).json({ message: "User fetched successfully", user });
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error", error: error.message });
+  }
+};
+
 

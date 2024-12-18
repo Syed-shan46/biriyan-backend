@@ -4,6 +4,11 @@ const mongoose = require('mongoose');
 // Define the User schema
 const userSchema = new mongoose.Schema({
   phone: { type: String, required: true, unique: true },
+  username: {
+    type: String,
+    trim: true,
+    minlength: 3
+  },
 
 }, {
   timestamps: true,

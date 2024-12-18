@@ -4,7 +4,7 @@ const User = require('../models/user');
 
 exports.createOrder = async (req, res) => {
   try {
-    const { userId, name, phone, address, productName, quantity, category, image, totalAmount, paymentStatus } = req.body;
+    const { userId, userName, phone, address, productName, quantity, category, image, totalAmount, paymentStatus } = req.body;
     // Fetch the user's email from the User model using userId
     const user = await User.findById(userId).select('email userName');
     if (!user) {
@@ -26,7 +26,7 @@ exports.createOrder = async (req, res) => {
     // Create the order 
     const newOrder = new Order({
       userId,
-      name,
+      userName,
       phone,
       address,
       productName,
@@ -42,7 +42,7 @@ exports.createOrder = async (req, res) => {
     await newOrder.save();
     // Send order details email to admin
     console.log('Sending email to admin for order placement...');
-  
+
     // **Step 2: Confirm successful order creation to the user (Optional)**
     console.log('Order placed successfully. Admin notified via email.');
 
@@ -90,7 +90,7 @@ exports.acceptOrder = async (req, res) => {
     const order = await Order.findById(orderId).populate('userId', 'email userName');
 
     if (!order) {
-      return res.status(404).json({ message: 'Order not found' }) ;
+      return res.status(404).json({ message: 'Order not found' });
     }
 
     const userEmail = order.userId?.email;
