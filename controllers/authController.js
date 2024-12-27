@@ -50,7 +50,7 @@ exports.editUser = async (req, res) => {
 };
 
 exports.checkUser = async (req, res) => {
-  const { phone } = req.body;
+  const { phone, userDeviceToken } = req.body;
 
   try {
     if (!phone) {
@@ -67,7 +67,7 @@ exports.checkUser = async (req, res) => {
     }
 
     // User not found, create a new user
-    user = new User({ phone });
+    user = new User({ phone, userDeviceToken });
     await user.save();
 
     // Generate token for the new user

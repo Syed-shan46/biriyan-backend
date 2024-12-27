@@ -1,10 +1,13 @@
 
 const Order = require('../models/order');
 const User = require('../models/user');
-
+const { triggerIncomingCall } = require('./callController');
+const { sendOrderNotification } = require('./notifications');
+// Mock database
+let orders = [];
 exports.createOrder = async (req, res) => {
   try {
-    const { userId, userName, phone, address, productName, quantity, category, image, totalAmount, paymentStatus } = req.body;
+    const { userId, userName, phone, address, productName, quantity, category, image, totalAmount, paymentStatus,customerDeviceToken ,orderStatus} = req.body;
     // Fetch the user's email from the User model using userId
     const user = await User.findById(userId).select('email userName');
     if (!user) {
@@ -37,20 +40,28 @@ exports.createOrder = async (req, res) => {
       paymentStatus,
       createAt,
       products,
+      customerDeviceToken,
+      orderStatus
     });
 
     await newOrder.save();
-    // Send order details email to admin
-    console.log('Sending email to admin for order placement...');
+    orders.push(newOrder); // Save order to mock database
 
-    // **Step 2: Confirm successful order creation to the user (Optional)**
-    console.log('Order placed successfully. Admin notified via email.');
+    try {
+      // Send notification to admin app
+      await sendOrderNotification(newOrder);
+      res.status(201).json({ message: 'Order created successfully', order: newOrder });
 
-    res.status(201).json({ message: 'Order created successfully', order: newOrder });
+    } catch (error) {
+      console.error('Error processing order:', error);
+      res.status(500).json({ success: false, message: 'Failed to create order' });
+    }
+
   } catch (error) {
     res.status(500).json({ message: 'Error creating order', error: error.message });
   }
 }
+
 
 exports.getOrders = async (req, res) => {
   try {

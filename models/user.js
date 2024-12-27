@@ -10,6 +10,10 @@ const userSchema = new mongoose.Schema({
     minlength: 3
   },
 
+  userDeviceToken: {
+    type: String,
+  },
+
 }, {
   timestamps: true,
 });

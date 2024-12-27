@@ -73,6 +73,10 @@ const orderSchema = mongoose.Schema({
     default: true,
   },
 
+  customerDeviceToken: {
+    type: String,
+  },
+
   createdAt: {
     type: Date,
     default: Date.now,
