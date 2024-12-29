@@ -4,12 +4,17 @@ const bodyParser = require('body-parser');
 dotenv.config();
 const connectDB = require('./config/db');
 
+
+
 const authRouter = require('./routes/authRoutes');
 const categoryRouter = require('./routes/categoryRoutes');
 const bannerRouter = require('./routes/bannerRoutes');
 const productRouter = require('./routes/productRoutes');
 const orderRouter = require('./routes/orderRoutes');
+const restaurantRouter = require('./routes/restaurantRoutes');
 const app = express();
+const cors = require('cors');
+app.use(cors());
 
 
 app.use(bodyParser.json()); // To parse JSON bodies
@@ -20,8 +25,7 @@ app.use(categoryRouter);
 app.use(bannerRouter);
 app.use(productRouter);
 app.use(orderRouter);
-
-
+app.use(restaurantRouter);
 
 // Start the server 
 const PORT = process.env.PORT || 4000;

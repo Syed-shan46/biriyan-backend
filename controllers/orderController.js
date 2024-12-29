@@ -7,7 +7,7 @@ const { sendOrderNotification } = require('./notifications');
 let orders = [];
 exports.createOrder = async (req, res) => {
   try {
-    const { userId, userName, phone, address, productName, quantity, category, image, totalAmount, paymentStatus,customerDeviceToken ,orderStatus} = req.body;
+    const { userId, userName, phone, address, productName, quantity, category, image, totalAmount, paymentStatus, customerDeviceToken, orderStatus } = req.body;
     // Fetch the user's email from the User model using userId
     const user = await User.findById(userId).select('email userName');
     if (!user) {
@@ -98,29 +98,38 @@ exports.acceptOrder = async (req, res) => {
 
   try {
     // Retrieve the order by orderId and populate the 'userId' field to get the user's email and name
-    const order = await Order.findById(orderId).populate('userId', 'email userName');
+    const order = await Order.findById(orderId)
 
     if (!order) {
       return res.status(404).json({ message: 'Order not found' });
     }
 
-    const userEmail = order.userId?.email;
-    const userName = order.userId?.name;
-
     // Update the order status to "Accepted"
     order.orderStatus = 'Accepted';
     await order.save();
+    res.status(200).json({ message: 'Order accepted and user notified via email' });
 
-    // **User Email Notification**: Send confirmation email to the user
-    await sendUserOrderConfirmation({
-      orderId: order._id,
-      userEmail,
-      userName,
-      products: order.products,
-      totalAmount: order.totalAmount,
-    });
+  } catch (error) {
+    console.error('Error accepting order:', error);
+    return res.status(500).json({ error: 'Failed to accept order' });
+  }
+};
 
-    console.log(`Order accepted, email sent to user: ${userEmail}`);
+// Updated acceptOrder function
+exports.cancelOrder = async (req, res) => {
+  const { orderId } = req.body; // assuming you get the orderId from the request body
+
+  try {
+    // Retrieve the order by orderId and populate the 'userId' field to get the user's email and name
+    const order = await Order.findById(orderId)
+
+    if (!order) {
+      return res.status(404).json({ message: 'Order not found' });
+    }
+
+    // Update the order status to "Accepted"
+    order.orderStatus = 'Cancelled';
+    await order.save();
     res.status(200).json({ message: 'Order accepted and user notified via email' });
 
   } catch (error) {
@@ -136,6 +145,26 @@ exports.getAcceptedOrders = async (req, res) => {
   } catch (error) {
     console.error('Error fetching accepted orders:', error);
     res.status(500).json({ success: false, message: 'Failed to fetch accepted orders' });
+  }
+};
+
+exports.getCancelledOrders = async (req, res) => {
+  try {
+    const cancelledOrders = await Order.find({ orderStatus: 'Cancelled' }).sort({ createdAt: -1 });
+    res.status(200).json({ success: true, orders: cancelledOrders });
+  } catch (error) {
+    console.error('Error fetching Cancelled orders:', error);
+    res.status(500).json({ success: false, message: 'Failed to fetch Cancelled orders' });
+  }
+};
+
+exports.getProcessingOrders = async (req, res) => {
+  try {
+    const processingOrders = await Order.find({ orderStatus: 'Processing' }).sort({ createdAt: -1 });
+    res.status(200).json({ success: true, orders: processingOrders });
+  } catch (error) {
+    console.error('Error fetching Processing orders:', error);
+    res.status(500).json({ success: false, message: 'Failed to fetch Processing orders' });
   }
 };
 

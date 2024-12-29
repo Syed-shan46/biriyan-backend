@@ -2,11 +2,10 @@ const Product = require('../models/product');
 
 exports.addProduct = async (req, res) => {
   try {
-    const { itemName, itemPrice, quantity, description, category, images, popular, recommend, isAdditional, additional } = req.body
-    const product = new Product({ itemName, itemPrice, quantity, description, category, popular, isAdditional, recommend, images, additional });
+    const { itemName, itemPrice, quantity, description, category, images, popular, recommend, isAdditional, additional, isAvailable } = req.body
+    const product = new Product({ itemName, itemPrice, quantity, description, category, popular, isAdditional, recommend, images, additional, isAvailable });
     await product.save();
     return res.status(201).send(product);
-    res.status(500).json({ error: e.message });
   } catch (e) {
   }
 }
@@ -130,5 +129,25 @@ exports.deleteProduct = async (req, res) => {
       error: error.message  // Includes the specific error message in the response
     });
 
+  }
+
+}
+
+exports.availability = async (req, res) => {
+  const { isAvailable } = req.body;
+  const productId = req.params.id;
+
+  try {
+    const product = await Product.findByIdAndUpdate(
+      productId,
+      { isAvailable },
+      { new: true }
+    );
+    if (!product) {
+      return res.status(404).json({ message: 'Product not found' });
+    }
+    res.json({ message: 'Product availability updated', product });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error', error });
   }
 }
