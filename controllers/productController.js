@@ -150,7 +150,7 @@ exports.availability = async (req, res) => {
    
 
     if (!product) {
-      return res.status(404).json({ message: 'Product not found' });
+      return res.status(404).json({ message: 'Product not found' }); 
     }
 
     // Emit event to notify user app(s) of the updated product availability   productAvailabilityUpdated
