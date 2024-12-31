@@ -1,11 +1,10 @@
-// controllers/socketController.js
-
 const { Server } = require('socket.io');
+let io;  // Declare io here
 
-
-
+// Initialize Socket.IO and attach it to the server
 function initializeSocket(server) {
-    const io = new Server(server, {
+    
+   const io = new Server(server, {
         cors: {
             origin: '*', // Allow all origins; restrict in production
         },
@@ -24,7 +23,8 @@ function initializeSocket(server) {
         });
     });
 
-    return io;
-}
 
-module.exports = { initializeSocket };
+    return io;  // Return io so it can be used elsewhere
+}   
+
+module.exports = { initializeSocket, io };  // Export both io and initializeSocket

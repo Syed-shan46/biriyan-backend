@@ -1,4 +1,7 @@
+const { io } = require('./socketController')  // Import io
 const Product = require('../models/product');
+
+
 
 exports.addProduct = async (req, res) => {
   try {
@@ -143,11 +146,25 @@ exports.availability = async (req, res) => {
       { isAvailable },
       { new: true }
     );
+
+   
+
     if (!product) {
       return res.status(404).json({ message: 'Product not found' });
     }
+
+    // Emit event to notify user app(s) of the updated product availability   productAvailabilityUpdated
+    // Emit an event to notify the user app(s)
+
+    io.emit('productAvailabilityUpdated', {
+      productId: product.id,
+      isAvailable: product.isAvailable,
+    });
+
+
     res.json({ message: 'Product availability updated', product });
   } catch (error) {
+    console.error("Error updating product:", error);
     res.status(500).json({ message: 'Server error', error });
   }
 }
