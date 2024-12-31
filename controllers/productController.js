@@ -156,11 +156,7 @@ exports.availability = async (req, res) => {
     // Emit event to notify user app(s) of the updated product availability   productAvailabilityUpdated
     // Emit an event to notify the user app(s)
 
-    io.emit('productAvailabilityUpdated', {
-      productId: product.id,
-      isAvailable: product.isAvailable,
-    });
-
+  
 
     res.json({ message: 'Product availability updated', product });
   } catch (error) {
