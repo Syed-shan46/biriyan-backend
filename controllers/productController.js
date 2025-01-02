@@ -147,20 +147,38 @@ exports.availability = async (req, res) => {
       { new: true }
     );
 
-   
+
 
     if (!product) {
-      return res.status(404).json({ message: 'Product not found' });  
+      return res.status(404).json({ message: 'Product not found' });
     }
 
     // Emit event to notify user app(s) of the updated product availability   productAvailabilityUpdated
     // Emit an event to notify the user app(s)
 
-  
+
 
     res.json({ message: 'Product availability updated', product });
   } catch (error) {
     console.error("Error updating product:", error);
     res.status(500).json({ message: 'Server error', error });
+  }
+}
+
+exports.searchproduct = async (req, res) => {
+  try {
+    const query = req.query.query || '';
+
+    // Perform a case-insensitive search for the query term
+    const products = await Product.find({
+      $or: [
+        { itemName: { $regex: query, $options: 'i' } }, // Search in item name
+        { category: { $regex: query, $options: 'i' } }  // Search in category
+      ]
+    });
+
+    res.json({ data: products });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to search products' });
   }
 }

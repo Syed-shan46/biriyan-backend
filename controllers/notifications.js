@@ -16,7 +16,7 @@ async function sendOrderNotification(order) {
     },
     android: {
       notification: {
-        sound: 'ring',  // Custom sound file name (without the extension)
+        sound: 'coin_drop',  // Custom sound file name (without the extension)
       },
     },
     topic: 'admin-orders', // Topic for all admin devices
@@ -30,6 +30,27 @@ async function sendOrderNotification(order) {
   }
 }
 
+function sendNotificationToAllUsers(req, res) {
+  const { title, message } = req.body;
+
+  const payload = {
+    notification: {
+      title: title,
+      body: message,
+    },
+    topic: 'all',  // Send to all users subscribed to this topic
+  };
+
+  admin.messaging().send(payload)
+    .then((response) => {
+      res.status(200).send('Notification sent successfully');
+    })
+    .catch((error) => {
+      res.status(500).send('Error sending notification');
+    });
+}
+
 module.exports = {
   sendOrderNotification,
+  sendNotificationToAllUsers
 };

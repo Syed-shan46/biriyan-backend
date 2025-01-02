@@ -1,13 +1,7 @@
 
 const mongoose = require('mongoose');
 
-const productSchema = new mongoose.Schema({
-  name: String,
-  quantity: Number,
-  category: String,
-  image: String,
-  price: Number,
-});
+
 
 
 const orderSchema = mongoose.Schema({
@@ -30,27 +24,13 @@ const orderSchema = mongoose.Schema({
     trim: true
   },
 
-  productName: {
-    type: String,
-    required: true,
-  },
-
-  products: [productSchema],
-
-  quantity: {
-    type: String,
-    required: true,
-  },
-
-  category: {
-    type: String,
-    required: true,
-  },
-
-  image: {
-    type: String,
-
-  },
+  products: [{  // An array of product objects
+    productName: { type: String, required: true },
+    quantity: { type: Number, required: true },
+    category: { type: String, required: true },
+    image: { type: String, required: true },
+    itemPrice: { type: Number },
+  }],
 
   totalAmount: {
     type: Number,
