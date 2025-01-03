@@ -1,5 +1,5 @@
 const express = require('express');
-const { createUser, editUser, checkUser, addUsername, updateUsername, getUserByPhone, getUserById } = require('../controllers/authController');
+const { createUser, editUser, checkUser, addUsername, updateUsername, getUserByPhone, getUserById, checkUserName } = require('../controllers/authController');
 const router = express.Router();
 
 // POST request to create a user
@@ -12,5 +12,7 @@ router.post('/checkUser', checkUser);
 router.patch('/updateUsername', updateUsername);
 
 router.get("/user/:userId", getUserById);
+
+router.get('/check-username', checkUserName);
 
 module.exports = router;

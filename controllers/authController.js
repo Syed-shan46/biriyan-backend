@@ -124,4 +124,33 @@ exports.getUserById = async (req, res) => {
   }
 };
 
+exports.checkUserName = async (req, res) => {
+  try {
+    let { phoneNumber } = req.query;
+
+    if (!phoneNumber) {
+      return res.status(400).json({ message: 'Phone number is required' });
+    }
+  
+    // Ensure phoneNumber starts with "+"
+    if (!phoneNumber.startsWith('+')) {
+      phoneNumber = `+${phoneNumber}`;
+    }
+
+    console.log("Normalized phoneNumber:", phoneNumber);
+
+    // Query the database
+    const user = await User.findOne({ phone: phoneNumber });
+    console.log("Query result:", user);
+
+    if (user && user.username) {
+      return res.status(200).json({ usernameExists: true });
+    } else {
+      return res.status(200).json({ usernameExists: false });
+    }
+  } catch (error) {
+    console.error("Error:", error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
 
