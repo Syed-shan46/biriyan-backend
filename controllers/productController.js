@@ -182,3 +182,34 @@ exports.searchproduct = async (req, res) => {
     res.status(500).json({ error: 'Failed to search products' });
   }
 }
+
+exports.curryAndFryProducts = async (req, res) => {
+  try {
+    // Fetch products where category is either "Rice" or "Fry"
+    const products = await Product.find({
+      category: { $in: ['Curry', 'Fry'] }, // Match products in either "Rice" or "Fry"
+    });
+
+    // Return the filtered products
+    return res.status(200).json(products);
+  } catch (error) {
+    return res.status(500).json({ error: 'Failed to fetch products' });
+  }
+}
+
+exports.riceProducts = async (req, res) => {
+  try {
+    // Fetch products where category is either "Rice" or "Fry"
+    const products = await Product.find({
+      category: { $in: ['Rice'] }, // Match products in either "Rice" or "Fry"
+    });
+
+    // Return the filtered products
+    return res.status(200).json(products);
+  } catch (error) {
+    return res.status(500).json({ error: 'Failed to fetch products' });
+  }
+}
+
+
+

@@ -1,5 +1,5 @@
 const express = require('express');
-const { addProduct, newProduct, recommended, products, productsByCategory, getProductById, updateProduct, deleteProduct, availability, searchproduct } = require('../controllers/productController');
+const { addProduct, newProduct, recommended, products, productsByCategory, getProductById, updateProduct, deleteProduct, availability, searchproduct, curryAndFryProducts, riceProducts } = require('../controllers/productController');
 const ProductRouter = express.Router();
 
 ProductRouter.post('/api/add-product', addProduct);
@@ -18,8 +18,12 @@ ProductRouter.put('/api/products/:id', updateProduct);
 
 ProductRouter.delete('/api/products/:productId', deleteProduct);
 
-ProductRouter.put('/api/product/:id/availability',availability);
+ProductRouter.put('/api/product/:id/availability', availability);
 
 ProductRouter.get('/api/search', searchproduct);
+
+ProductRouter.get('/api/curry-and-fry-products', curryAndFryProducts);
+
+ProductRouter.get('/api/rice-products', riceProducts);
 
 module.exports = ProductRouter;
