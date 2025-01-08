@@ -7,15 +7,19 @@ const { sendOrderNotification } = require('./notifications');
 let orders = [];
 exports.createOrder = async (req, res) => {
   try {
-    const { userId, userName, phone, address, productName,itemPrice, quantity, category, image, totalAmount, paymentStatus, customerDeviceToken, orderStatus, } = req.body;
+    const { userId, userName, phone, address, productName, itemPrice, quantity, category, image, totalAmount, paymentStatus, customerDeviceToken, orderStatus, } = req.body;
     // Fetch the user's email from the User model using userId
     const user = await User.findById(userId).select('email userName');
+
+
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
-    const userEmail = user.email; // Retrieve the email from the user object
+
 
     const createAt = new Date().getMilliseconds()
+
+
 
     // Create the products array (assuming one product per order for now)
     const products = productName.map((name, index) => ({
@@ -43,6 +47,11 @@ exports.createOrder = async (req, res) => {
     await newOrder.save();
     orders.push(newOrder); // Save order to mock database
 
+    if (!user.hasOrderedBefore) {
+      user.hasOrderedBefore = true;
+      await user.save();
+    }
+
     try {
       // Send notification to admin app
       await sendOrderNotification(newOrder);
@@ -57,6 +66,33 @@ exports.createOrder = async (req, res) => {
     res.status(500).json({ message: 'Error creating order', error: error.message });
   }
 }
+
+
+exports.checkHasOrderedBefore = async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    // Find the user by ID
+    const user = await User.findById(userId).select('hasOrderedBefore');
+    if (!user) {
+      return res.status(404).json({ success: false, message: 'User not found' });
+    }
+
+    // Respond with the hasOrderedBefore status
+    res.status(200).json({
+      success: true,
+      hasOrderedBefore: user.hasOrderedBefore,
+    });
+  } catch (error) {
+    console.error('Error checking hasOrderedBefore:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error checking hasOrderedBefore',
+      error: error.message,
+    });
+  }
+};
+
 
 
 exports.getOrders = async (req, res) => {

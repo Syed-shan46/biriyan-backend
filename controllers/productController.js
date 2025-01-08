@@ -203,7 +203,7 @@ exports.riceProducts = async (req, res) => {
     const products = await Product.find({
       category: { $in: ['Rice'] }, // Match products in either "Rice" or "Fry"
     });
-
+    
     // Return the filtered products
     return res.status(200).json(products);
   } catch (error) {

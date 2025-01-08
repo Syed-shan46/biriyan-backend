@@ -1,5 +1,5 @@
 const express = require('express');
-const { createOrder, getOrders, getallOrders, acceptOrder, cancelOrder, getAcceptedOrders, getCancelledOrders, getProcessingOrders } = require('../controllers/orderController');
+const { createOrder, getOrders, getallOrders, acceptOrder, cancelOrder, getAcceptedOrders, getCancelledOrders, getProcessingOrders, checkHasOrderedBefore } = require('../controllers/orderController');
 const { triggerIncomingCall } = require('../controllers/callController');
 const { sendNotificationToAllUsers } = require('../controllers/notifications');
 
@@ -24,5 +24,7 @@ OrderRouter.get('/api/cancelled-orders', getCancelledOrders);
 OrderRouter.get('/api/processing-orders', getProcessingOrders);
 
 OrderRouter.post('/api/send-notification', sendNotificationToAllUsers);
+
+OrderRouter.get('/users/:userId/hasOrderedBefore', checkHasOrderedBefore);
 
 module.exports = OrderRouter;

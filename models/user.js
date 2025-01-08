@@ -9,14 +9,19 @@ const userSchema = new mongoose.Schema({
     trim: true,
     minlength: 3
   },
-
   userDeviceToken: {
     type: String,
   },
+  hasOrderedBefore: {
+    type: Boolean,
+    default: false,
+  }, // Custom field
 
 }, {
   timestamps: true,
 });
+
+
 
 // Create the User model
 const User = mongoose.model('User', userSchema);
