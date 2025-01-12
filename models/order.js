@@ -57,6 +57,10 @@ const orderSchema = mongoose.Schema({
     type: String,
   },
 
+  latLong: {
+    type: String,
+  },
+  
   createdAt: {
     type: Date,
     default: Date.now,

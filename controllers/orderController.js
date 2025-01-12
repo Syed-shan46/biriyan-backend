@@ -7,7 +7,7 @@ const { sendOrderNotification } = require('./notifications');
 let orders = [];
 exports.createOrder = async (req, res) => {
   try {
-    const { userId, userName, phone, address, productName, itemPrice, quantity, category, image, totalAmount, paymentStatus, customerDeviceToken, orderStatus, } = req.body;
+    const { userId, userName, phone, address, productName,latLong, itemPrice, quantity, category, image, totalAmount, paymentStatus, customerDeviceToken, orderStatus, } = req.body;
     // Fetch the user's email from the User model using userId
     const user = await User.findById(userId).select('email userName');
 
@@ -41,7 +41,8 @@ exports.createOrder = async (req, res) => {
       createAt,
       products,
       customerDeviceToken,
-      orderStatus
+      orderStatus,
+      latLong,
     });
 
     await newOrder.save();
